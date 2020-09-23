@@ -29,6 +29,8 @@ namespace API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<IProductRepository, ProductRepository>();
+            // Injecting generic type
+            services.AddScoped(typeof(IGenericRepository<>), (typeof(GenericRepository<>)));
             services.AddControllers();
             // GetConnectionString points to GetSection("ConnectionStrings")[name]
             // name should be the key that returns the connection string!
