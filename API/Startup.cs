@@ -57,6 +57,9 @@ namespace API
 
             app.UseRouting();
 
+            // serve static files
+            app.UseStaticFiles();
+
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

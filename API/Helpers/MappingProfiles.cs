@@ -1,7 +1,19 @@
+using AutoMapper;
+using Core.Entities;
+using API.Dtos;
+
 namespace API.Helpers
 {
-    public class MappingProfiles
+    public class MappingProfiles : Profile
     {
+        public MappingProfiles()
+        {
+            // create a map between Product and ProductToReturnDto.
+            CreateMap<Product, ProductToReturnDto>()
+                .ForMember( d => d.ProductBrand, o => o.MapFrom( s => s.ProductBrand.Name ))
+                .ForMember( d => d.ProductType, o => o.MapFrom( s => s.ProductType.Name ))
+                .ForMember( d => d.PictureUrl, o => o.MapFrom<ProductUrlResolver>());
+        }
         
     }
 }
