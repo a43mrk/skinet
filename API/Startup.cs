@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Builder;
+using AutoMapper;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -6,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Core.Interfaces;
+using API.Helpers;
 
 namespace API
 {
@@ -29,9 +31,14 @@ namespace API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<IProductRepository, ProductRepository>();
+
             // Injecting generic type
             services.AddScoped(typeof(IGenericRepository<>), (typeof(GenericRepository<>)));
             services.AddControllers();
+
+            // need to specify where the mapping profile are located(the Assembly where was created the mapping profile class).
+            services.AddAutoMapper(typeof(MappingProfiles));
+
             // GetConnectionString points to GetSection("ConnectionStrings")[name]
             // name should be the key that returns the connection string!
             services.AddDbContext<StoreContext>(x =>
