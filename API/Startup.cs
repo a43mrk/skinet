@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using API.Errors;
 using System.Linq;
 using Microsoft.OpenApi.Models;
+using API.Extensions;
 
 namespace API
 {
@@ -35,10 +36,6 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<IProductRepository, ProductRepository>();
-
-            // Injecting generic type
-            services.AddScoped(typeof(IGenericRepository<>), (typeof(GenericRepository<>)));
             services.AddControllers();
 
             // need to specify where the mapping profile are located(the Assembly where was created the mapping profile class).
@@ -49,25 +46,8 @@ namespace API
             services.AddDbContext<StoreContext>(x =>
                 x.UseSqlite(_config.GetConnectionString("DefaultConnection")));
 
-            // add error array type capability
-            services.Configure<ApiBehaviorOptions>(options =>
-                {
-                    options.InvalidModelStateResponseFactory = actionContext => {
-                        var errors = actionContext.ModelState
-                            .Where( e => e.Value.Errors.Count > 0)
-                            .SelectMany( x => x.Value.Errors)
-                            .Select(x => x.ErrorMessage).ToArray();
-                        var errorResponse = new ApiValidationErrorResponse {
-                            Errors = errors
-                        };
-                        return new BadRequestObjectResult(errorResponse);
-                };
-            });
-
-            // Swagger
-            services.AddSwaggerGen(c => {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "SkiNet API", Version = "v1"});
-            });
+            services.AddApplicationServices();
+            services.AddSwaggerDocumentation();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -93,9 +73,8 @@ namespace API
 
             app.UseAuthorization();
 
-            // Swagger middleware shold be set after authorization!
-            app.UseSwagger();
-            app.UseSwaggerUI(c => {c.SwaggerEndpoint("/swagger/v1/swagger.json", "SkiNet API v1"); });
+            // swagger
+            app.UseSwaggerDocumentation();
 
             app.UseEndpoints(endpoints =>
             {
