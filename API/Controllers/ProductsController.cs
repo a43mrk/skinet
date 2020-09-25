@@ -9,7 +9,8 @@ using Core.Interfaces;
 using Core.Specifications;
 using API.Dtos;
 using AutoMapper;
-
+using API.Errors;
+using Microsoft.AspNetCore.Http;
 
 namespace API.Controllers
 {
@@ -34,6 +35,8 @@ namespace API.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         public async Task<ActionResult<IReadOnlyList<ProductToReturnDto>>> GetProducts()
         {
             // return "this will be a list of products";
@@ -52,6 +55,9 @@ namespace API.Controllers
             //         ProductType = p.ProductType.Name
             //     }
             // ).ToList();
+
+            // Check for empty results that came from query.
+            if(products == null) return NotFound(new ApiResponse(404));
             return Ok(
                     _mapper.Map<IReadOnlyList<Product>, IReadOnlyList<ProductToReturnDto>>(products)
                 );
