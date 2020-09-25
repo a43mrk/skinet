@@ -37,27 +37,15 @@ namespace API.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IReadOnlyList<ProductToReturnDto>>> GetProducts()
+        public async Task<ActionResult<IReadOnlyList<ProductToReturnDto>>> GetProducts(
+                string sort,
+                int? brandId,
+                int? typeId
+            )
         {
-            // return "this will be a list of products";
-            // var products = await _context.Products.ToListAsync();
-            // var products = await _repo.GetProductsAsync();
-            var spec = new ProductsWithTypesAndBrandsSpecification();
+            var spec = new ProductsWithTypesAndBrandsSpecification(sort, brandId, typeId);
             var products = await _productsRepo.ListAsync(spec);
-            // return products.Select( p => new ProductToReturnDto
-            //     {
-            //         Id = p.Id,
-            //         Name = p.Name,
-            //         Description = p.Description,
-            //         PictureUrl = p.PictureUrl,
-            //         Price = p.Price,
-            //         ProductBrand = p.ProductBrand.Name,
-            //         ProductType = p.ProductType.Name
-            //     }
-            // ).ToList();
-
-            // Check for empty results that came from query.
-            if(products == null) return NotFound(new ApiResponse(404));
+            // if(products == null) return NotFound(new ApiResponse(404));
             return Ok(
                     _mapper.Map<IReadOnlyList<Product>, IReadOnlyList<ProductToReturnDto>>(products)
                 );
