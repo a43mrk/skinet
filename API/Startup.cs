@@ -48,6 +48,13 @@ namespace API
 
             services.AddApplicationServices();
             services.AddSwaggerDocumentation();
+
+            // 67-1 adding Cors
+            services.AddCors( opt => {
+                opt.AddPolicy("CorsPolicy", policy => {
+                    policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200");
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -70,6 +77,10 @@ namespace API
 
             // serve static files
             app.UseStaticFiles();
+
+            // 66-2 add cors just before authorization.
+            // beware of misspelling.
+            app.UseCors("CorsPolicy");
 
             app.UseAuthorization();
 
