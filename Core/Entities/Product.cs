@@ -1,5 +1,6 @@
 namespace Core.Entities
 {
+    // 10-1 entity, create a class that represents our entity.
     public class Product : BaseEntity
     {
     //    public int Id { get; set; } 

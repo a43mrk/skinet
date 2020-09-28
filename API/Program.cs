@@ -14,19 +14,21 @@ namespace API
 {
     public class Program
     {
+        // 27-3 don't forget to change to async and return type Task at main when using calling async methods at main
         public static async Task Main(string[] args)
         {
-            var host = CreateHostBuilder(args).Build(); //.Run();
-
-            // access data context
+            var host = CreateHostBuilder(args).Build();
+            // 27-1 access data context; enable auto migrations.
             using (var scope = host.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
                 var loggerFactory = services.GetRequiredService<ILoggerFactory>();
                 try
                 {
+                    // 27 -2 get StoreContext from Container and call migration programatically.
                     var context =  services.GetRequiredService<StoreContext>();
                     await context.Database.MigrateAsync();
+                    // 28-2 call seed data
                     await StoreContextSeed.SeedAsync(context, loggerFactory);
                 }
                 catch (Exception ex)
@@ -35,6 +37,7 @@ namespace API
                     logger.LogError(ex, "An error occured during migration");
                 }
             }
+            // don't forget to call .Run();
             host.Run();
         }
 

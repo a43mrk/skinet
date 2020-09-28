@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using Core.Entities;
 using System;
 
+// 28-1. Seed Data to Database with some data that comes from json files.
 namespace Infrastructure.Data
 {
     public class StoreContextSeed

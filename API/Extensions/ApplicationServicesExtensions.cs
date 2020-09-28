@@ -11,7 +11,10 @@ namespace API.Extensions
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
+            // 22-3. inject Repository
+            // pass the interface and the concret class.
             services.AddScoped<IProductRepository, ProductRepository>();
+
             // Injecting generic type
             services.AddScoped(typeof(IGenericRepository<>), (typeof(GenericRepository<>)));
 

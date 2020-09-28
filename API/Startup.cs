@@ -33,6 +33,7 @@ namespace API
         // removed by tutor. because he don't likes!
         // public IConfiguration Configuration { get; }
 
+        // *The dependency injection container.
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
@@ -41,9 +42,11 @@ namespace API
             // need to specify where the mapping profile are located(the Assembly where was created the mapping profile class).
             services.AddAutoMapper(typeof(MappingProfiles));
 
+            // 12-2 add connection string after set the key value at appsettings.Development.json (12-1)
             // GetConnectionString points to GetSection("ConnectionStrings")[name]
             // name should be the key that returns the connection string!
             services.AddDbContext<StoreContext>(x =>
+                // look for DefaultConnection key at json to get the connection string.
                 x.UseSqlite(_config.GetConnectionString("DefaultConnection")));
 
             services.AddApplicationServices();
@@ -57,6 +60,7 @@ namespace API
             });
         }
 
+        // Register the middlewares here!
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {

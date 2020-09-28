@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Core.Entities;
 
+// 26-1 configure EF migration to restrict how database accept data.
 namespace Infrastructure.Data.config
 {
     public class ProductConfiguration : IEntityTypeConfiguration<Product>
