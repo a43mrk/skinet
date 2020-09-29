@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
+// 36-2 Generic Base Specification
 namespace Core.Specifications
 {
     public class BaseSpecification<T> : ISpecification<T>
@@ -14,7 +15,7 @@ namespace Core.Specifications
         }
         
         public Expression<Func<T, bool>> Criteria { get; }
-
+        // initialize w/ empty list that will accumulate all related models to be included.
         public List<Expression<Func<T, object>>> Includes { get; } =
             new List<Expression<Func<T, object>>>();
 

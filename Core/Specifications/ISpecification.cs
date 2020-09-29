@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
+// 36-1 Contract for Specification.
 namespace Core.Specifications
 {
     public interface ISpecification<T>
@@ -13,6 +14,7 @@ namespace Core.Specifications
         // Includes property will hold a list of include statements.
         //
         List<Expression<Func<T, object>>> Includes { get; }
+
         Expression<Func<T, object>> OrderBy { get; }
         Expression<Func<T, object>> OrderByDescending { get; }
         int Take { get; }

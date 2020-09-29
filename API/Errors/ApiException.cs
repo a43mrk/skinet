@@ -1,4 +1,5 @@
 
+// 52-1 Exception class to handle Exceptions.
 namespace API.Errors
 {
     public class ApiException : ApiResponse
@@ -7,6 +8,7 @@ namespace API.Errors
         {
             Details = details;
         }
+        // Details will contains the stacktrace.
         public string Details { get; set; }
     }
 }

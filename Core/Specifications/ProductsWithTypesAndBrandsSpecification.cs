@@ -1,5 +1,6 @@
 using Core.Entities;
 
+// 39-1 Concret type of Specification for Products with Brands and Types.
 namespace Core.Specifications
 {
     public class ProductsWithTypesAndBrandsSpecification : BaseSpecification<Product>
@@ -11,8 +12,11 @@ namespace Core.Specifications
                 (!productParams.TypeId.HasValue || x.ProductTypeId == productParams.TypeId )
             )
         {
+            // 39-2 Start including ProductType and ProductBrand
             AddInclude( x => x.ProductType );
             AddInclude( x => x.ProductBrand );
+
+            //
             AddOrderBy( x => x.Name );
             ApplyPaging(productParams.PageSize * (productParams.PageIndex - 1), productParams.PageSize);
 
@@ -32,6 +36,8 @@ namespace Core.Specifications
             }
         }
         
+        // 40-1 accepts id
+        // pass expression to base
         public ProductsWithTypesAndBrandsSpecification(int id) : base( x => x.Id == id)
         {
             AddInclude( x => x.ProductType );

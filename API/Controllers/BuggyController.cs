@@ -2,10 +2,13 @@ using Infrastructure.Data;
 using Microsoft.AspNetCore.Mvc;
 using API.Errors;
 
+// 49-1 Controller for testing errors
 namespace API.Controllers
 {
     public class BuggyController : BaseApiController
     {
+        // 49-2 inject StoreContext at constructor
+        // alert: this controller is only for testing purposes!
         private readonly StoreContext _context;
         public BuggyController(StoreContext context)
         {
@@ -15,9 +18,12 @@ namespace API.Controllers
         [HttpGet("Notfound")]
         public ActionResult GetNotFoundRequest()
         {
-            var thing = _context.Products.Find(42);
+            var thing = _context.Products.Find(42); // Null is returned from EF if item do not exists
 
+            // Always guard yourself from null.
             if(thing == null){
+                // avoid null reference exceptions are relly bad :(
+                // 50-2 Use the custom error class we made.
                 return NotFound(new ApiResponse(404));
             }
 
@@ -35,6 +41,8 @@ namespace API.Controllers
         [HttpGet("badrequest")]
         public ActionResult GetBadRequest()
         {
+            // return default BadRequest method.
+            // 50-2 Use the custom error class we made.
             return BadRequest(new ApiResponse(400));
         }
 

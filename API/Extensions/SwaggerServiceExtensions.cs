@@ -6,6 +6,8 @@ namespace API.Extensions
 {
     public static class SwaggerServiceExtensions
     {
+        // 56-2 extends IServiceCollection as service on a static class static method to be able to add at
+        // Startup.ConfigureServices
         public static IServiceCollection AddSwaggerDocumentation(this IServiceCollection services)
         {
             // Swagger
@@ -16,6 +18,8 @@ namespace API.Extensions
             return services;
         }
 
+        // 56-3 extends IApplicationBuilder at static class's static method to be able to
+        // be added as middleware at Startup.Configure
         public static IApplicationBuilder UseSwaggerDocumentation(this IApplicationBuilder app)
         {
             // Swagger middleware shold be set after authorization!

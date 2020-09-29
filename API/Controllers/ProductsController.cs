@@ -27,6 +27,7 @@ namespace API.Controllers
             IGenericRepository<Product> productsRepo,
             IGenericRepository<ProductBrand> productBrandRepo,
             IGenericRepository<ProductType> productTypeRepo,
+            // 43-4 Inject IMapper
             IMapper mapper
             )
         {
@@ -36,6 +37,8 @@ namespace API.Controllers
             _mapper = mapper;
         }
 
+        // 55-1 document at Swagger w/ ProducesResponseType and possible returned StatusCode.
+        // 55-2 pass the custom error type as the first parameter to be documented at swagger.
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
@@ -43,11 +46,17 @@ namespace API.Controllers
                 [FromQuery] ProductSpecParams productParams
             )
         {
+            // 39-1 create specification for product
             var spec = new ProductsWithTypesAndBrandsSpecification(productParams);
             var countSpec = new ProductWithFiltersForCountSpecification(productParams);
             var totalItems = await _productsRepo.CountAsync(countSpec);
+
+            // 39-3 pass specification to repo
             var products = await _productsRepo.ListAsync(spec);
             var data = _mapper.Map<IReadOnlyList<Product>, IReadOnlyList<ProductToReturnDto>>(products);
+
+            if(products == null ) return NotFound( new ApiResponse(404));
+
             return Ok(
                 new Pagination<ProductToReturnDto>(productParams.PageIndex, productParams.PageSize, totalItems, data)
                 );
@@ -57,8 +66,13 @@ namespace API.Controllers
         public async Task<ActionResult<ProductToReturnDto>> GetProduct(int id){
             // return await _context.Products.FindAsync(id);
             // return await _repo.GetProductByIdAsync(id);
+
+            // 40-2 create the specification
             var spec = new ProductsWithTypesAndBrandsSpecification(id);
+
             // return await _productsRepo.GetByIdAsync(id);
+
+            // 40-3 pass the specification with id.
             var product = await _productsRepo.GetEntityWithSpec(spec);
             // return new ProductToReturnDto
             // {
@@ -70,6 +84,9 @@ namespace API.Controllers
             //     ProductBrand = product.ProductBrand.Name,
             //     ProductType = product.ProductType.Name
             // };
+
+            // 43-5 return the automapped object
+            // _.Map<from,to>(instance);
             return _mapper.Map<Product, ProductToReturnDto>(product);
         }
 

@@ -1,5 +1,7 @@
 using System;
 
+// 50-1 Custom Error response class
+// How to use: Only instantiate where an error is needed to be returned.
 namespace API.Errors
 {
     public class ApiResponse

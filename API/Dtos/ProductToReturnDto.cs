@@ -1,3 +1,5 @@
+
+// 42-1 Dto to be returned to client
 namespace API.Dtos
 {
     public class ProductToReturnDto
