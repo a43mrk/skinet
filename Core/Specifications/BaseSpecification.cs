@@ -25,20 +25,28 @@ namespace Core.Specifications
             Includes.Add(includeExpression);
         }
 
+        // 59-3 implement new sorting methods
         public Expression<Func<T, object>> OrderBy { get; private set; }
+        // 59-4 implement new sorting methods
         public Expression<Func<T, object>> OrderByDescending { get; private set; }
+
+        // 59-5 make the expression sort setable
         protected void AddOrderBy(Expression<Func<T,object>> orderByExpression)
         {
             OrderBy = orderByExpression;
         }
+        // 59-6 make the expression sort setable
         protected void AddOrderByDescending(Expression<Func<T,object>> orderByDescExpression)
         {
             OrderByDescending = orderByDescExpression;
         }
 
+        // 63-2 implement pagination methods
         public int Take { get; private set; }
         public int Skip { get; private set; }
         public bool IsPagingEnabled { get; private set; }
+
+        // 63-3 method to set pagination settings
         protected void ApplyPaging(int skip, int take)
         {
             Skip = skip;

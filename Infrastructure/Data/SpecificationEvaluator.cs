@@ -21,16 +21,20 @@ namespace Infrastructure.Data
                 query = query.Where(spec.Criteria);
             }
 
+            // 59-7 evaluate sorting specification
             if(spec.OrderBy != null)
             {
                 query = query.OrderBy(spec.OrderBy);
             }
 
+            // 59-8 evaluate sorting specification
             if(spec.OrderByDescending != null)
             {
                 query = query.OrderByDescending(spec.OrderByDescending);
             }
 
+            // 63-4 evaluate pagination expression at IQueryable.
+            // pagination needs to comes after any filtering and sorting.
             if(spec.IsPagingEnabled)
             {
                 query = query.Skip(spec.Skip).Take(spec.Take);

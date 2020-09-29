@@ -39,16 +39,27 @@ namespace API.Controllers
 
         // 55-1 document at Swagger w/ ProducesResponseType and possible returned StatusCode.
         // 55-2 pass the custom error type as the first parameter to be documented at swagger.
+        // 59-9 pass sort parameter into endpoint
+        // 62-1 add filter by productTypeId and productBrandId parameters.
+        // 65-5 return data wrapped inside a Pagination
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         public async Task<ActionResult<Pagination<ProductToReturnDto>>> GetProducts(
+                // 64-2 using custom parameter that contains sorting, filtering, and pagination
+                // 64-5 [FromQuery] tell to deserialize the custom parameter.
                 [FromQuery] ProductSpecParams productParams
             )
         {
             // 39-1 create specification for product
+            // 62-2 pass the productTypeId and productBrandId filter parameters to specification
+            // 64-3 pass the custom parameter class other than gazillions of parameters.
             var spec = new ProductsWithTypesAndBrandsSpecification(productParams);
+            // 65-6 create count specification
             var countSpec = new ProductWithFiltersForCountSpecification(productParams);
+
+            // 65-7 get total items for count
+            // 65-9 beware to not mix the specifications for count and productsWithBrandsAndTypes.
             var totalItems = await _productsRepo.CountAsync(countSpec);
 
             // 39-3 pass specification to repo
@@ -58,6 +69,7 @@ namespace API.Controllers
             if(products == null ) return NotFound( new ApiResponse(404));
 
             return Ok(
+                // 65-8 return the data inside pagination object
                 new Pagination<ProductToReturnDto>(productParams.PageIndex, productParams.PageSize, totalItems, data)
                 );
         }

@@ -1,3 +1,4 @@
+// 64-1 class to represent end-points parameters
 namespace Core.Specifications
 {
     public class ProductSpecParams
@@ -13,6 +14,7 @@ namespace Core.Specifications
         public int? BrandId { get; set; }
         public int? TypeId { get; set; }
         public string Sort { get; set; }
+
         // 66-1. search functionality
         private string _search;
         public string Search

@@ -53,6 +53,7 @@ namespace API
 
             // 67-1 adding Cors
             services.AddCors( opt => {
+                // beware to not misspell CorsPolicy with camelcase
                 opt.AddPolicy("CorsPolicy", policy => {
                     policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200");
                 });
@@ -83,7 +84,7 @@ namespace API
             // 46-1 serve static files
             app.UseStaticFiles();
 
-            // 66-2 add cors just before authorization.
+            // 67-2 add cors just before authorization.
             // beware of misspelling.
             app.UseCors("CorsPolicy");
 

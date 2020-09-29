@@ -15,6 +15,8 @@ namespace Core.Interfaces
         // 37-2 make generic repository works with specification.
         Task<T> GetEntityWithSpec(ISpecification<T> spec);
         Task<IReadOnlyList<T>> ListAsync(ISpecification<T> spec);
+
+        // 65-2 adding count capability
         Task<int> CountAsync(ISpecification<T> spec);
     }
 }
