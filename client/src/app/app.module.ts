@@ -1,3 +1,4 @@
+import { HomeModule } from './home/home.module';
 import { CoreModule } from './core/core.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
@@ -16,10 +17,9 @@ import { ShopModule } from './shop/shop.module';
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    // 80-1 import HttpClientModule and register at imports here.
     HttpClientModule,
-    ShopModule,
-    CoreModule
+    CoreModule,
+    HomeModule
   ],
   providers: [],
   bootstrap: [AppComponent]
