@@ -17,6 +17,9 @@ namespace API.Extensions
             // pass the interface and the concret class.
             services.AddScoped<IProductRepository, ProductRepository>();
 
+            // 137-3 Inject IBasketRepository and BasketRepository
+            services.AddScoped<IBasketRepository,BasketRepository>();
+
             // 33-3 Injecting generic Repository
             services.AddScoped(typeof(IGenericRepository<>), (typeof(GenericRepository<>)));
 

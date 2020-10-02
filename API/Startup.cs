@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using API.Helpers;
 using API.Middleware;
 using API.Extensions;
+using StackExchange.Redis;
 
 namespace API
 {
@@ -44,6 +45,14 @@ namespace API
             services.AddDbContext<StoreContext>(x =>
                 // look for DefaultConnection key at json to get the connection string.
                 x.UseSqlite(_config.GetConnectionString("DefaultConnection")));
+
+            // 135-1
+            // Redis configuration
+            // 135-2 add "Redis": "localhost" key:value to appsettings.Development.json
+            services.AddSingleton<ConnectionMultiplexer>( c => {
+                var configuration = ConfigurationOptions.Parse(_config.GetConnectionString("Redis"), true);
+                return ConnectionMultiplexer.Connect(configuration);
+            });
 
             // 56-2 inject the custom services
             services.AddApplicationServices();
