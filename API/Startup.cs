@@ -49,7 +49,7 @@ namespace API
             // 135-1
             // Redis configuration
             // 135-2 add "Redis": "localhost" key:value to appsettings.Development.json
-            services.AddSingleton<ConnectionMultiplexer>( c => {
+            services.AddSingleton<IConnectionMultiplexer>( c => {
                 var configuration = ConfigurationOptions.Parse(_config.GetConnectionString("Redis"), true);
                 return ConnectionMultiplexer.Connect(configuration);
             });
