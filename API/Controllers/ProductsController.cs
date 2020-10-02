@@ -86,6 +86,8 @@ namespace API.Controllers
 
             // 40-3 pass the specification with id.
             var product = await _productsRepo.GetEntityWithSpec(spec);
+
+            if(product == null ) return NotFound( new ApiResponse(404));
             // return new ProductToReturnDto
             // {
             //     Id = product.Id,
