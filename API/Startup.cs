@@ -9,6 +9,7 @@ using API.Helpers;
 using API.Middleware;
 using API.Extensions;
 using StackExchange.Redis;
+using Infrastructure.Identity;
 
 namespace API
 {
@@ -45,6 +46,18 @@ namespace API
             services.AddDbContext<StoreContext>(x =>
                 // look for DefaultConnection key at json to get the connection string.
                 x.UseSqlite(_config.GetConnectionString("DefaultConnection")));
+
+            // 163-2 Inject Identity DbContext
+            // 163-3 Add conection string and the db name at appsettings.Development.json
+            // 164-1 Create a new migration for identity
+            // dotnet ef migrations add IdentityInitial -p Infrastructure -s API -o Identity/Migrations -c AppIdentityDbContext
+            //                          ^-name             ^-project          ^-starter class      ^-output        ^-DbContext
+            // to remove the last migration, !only execute this if you didn't executed database update.
+            // dotnet ef migrations remove -p Infrastructure -s API -c AppIdentityDbContext
+            services.AddDbContext<AppIdentityDbContext>( x =>
+            {
+                x.UseSqlite(_config.GetConnectionString("IdentityConnection"));
+            });
 
             // 135-1
             // Redis configuration
