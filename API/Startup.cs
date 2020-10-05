@@ -71,7 +71,7 @@ namespace API
             services.AddApplicationServices();
 
             // 166-2
-            services.AddIdentityServices();
+            services.AddIdentityServices(_config);
 
             // 56-4 inject the custom swagger service
             services.AddSwaggerDocumentation();
@@ -113,6 +113,8 @@ namespace API
             // beware of misspelling.
             app.UseCors("CorsPolicy");
 
+            // 171- add just before UseAuthorization the UseAuthentication
+            app.UseAuthentication();
             app.UseAuthorization();
 
             // 56-5 add swagger custom middleware class config after UseAuthorization.
