@@ -9,6 +9,9 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.DependencyInjection;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Core.Entities.Identity;
+using Infrastructure.Identity;
 
 namespace API
 {
@@ -30,6 +33,12 @@ namespace API
                     await context.Database.MigrateAsync();
                     // 28-2 call seed data
                     await StoreContextSeed.SeedAsync(context, loggerFactory);
+
+                    // 167-1 Add Identity to Program class
+                    var userManager = services.GetRequiredService<UserManager<AppUser>>();
+                    var identityContext = services.GetRequiredService<AppIdentityDbContext>();
+                    await identityContext.Database.MigrateAsync();
+                    await AppIdentityDbContextSeed.SeedUsersAsync(userManager);
                 }
                 catch (Exception ex)
                 {

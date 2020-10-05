@@ -70,6 +70,9 @@ namespace API
             // 56-2 inject the custom services
             services.AddApplicationServices();
 
+            // 166-2
+            services.AddIdentityServices();
+
             // 56-4 inject the custom swagger service
             services.AddSwaggerDocumentation();
 
