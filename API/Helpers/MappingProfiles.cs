@@ -25,6 +25,10 @@ namespace API.Helpers
 
             // 176-2 Define how to AutoMap for AddressDto
             CreateMap<Address, AddressDto>().ReverseMap();
+
+            // 182-2 map customer basket and basket item Dto's
+            CreateMap<CustomerBasketDto, CustomerBasket>();
+            CreateMap<BasketItemDto, BasketItem>();
         }
         
     }
