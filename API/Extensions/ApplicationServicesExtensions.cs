@@ -4,6 +4,7 @@ using Infrastructure.Data;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using API.Errors;
+using Infrastructure.Services;
 
 namespace API.Extensions
 {
@@ -13,6 +14,10 @@ namespace API.Extensions
         // to be able to be added as configuration at Startup.cs
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
+            // 172-1 Inject ITokenService and TokenService.
+            // to be accessed at AccountController.
+            services.AddScoped<ITokenService, TokenService>();
+
             // 22-3. inject Repository
             // pass the interface and the concret class.
             services.AddScoped<IProductRepository, ProductRepository>();

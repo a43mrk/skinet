@@ -1,6 +1,7 @@
 using AutoMapper;
 using Core.Entities;
 using API.Dtos;
+using Core.Entities.Identity;
 
 // 43-1 install nuget AutoMapper.Extensions.Microsoft.DependencyInjection
 // >dotnet restore
@@ -21,6 +22,9 @@ namespace API.Helpers
                 .ForMember( d => d.ProductType, o => o.MapFrom( s => s.ProductType.Name ))
                 // 45-5 add the custom value resolver(IvalueResolver implementation)
                 .ForMember( d => d.PictureUrl, o => o.MapFrom<ProductUrlResolver>());
+
+            // 176-2 Define how to AutoMap for AddressDto
+            CreateMap<Address, AddressDto>().ReverseMap();
         }
         
     }

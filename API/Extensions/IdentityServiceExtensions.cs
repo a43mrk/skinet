@@ -21,16 +21,23 @@ namespace API.Extensions
             builder.AddSignInManager<SignInManager<AppUser>>();
 
             // don't forget to add authentication
-            // 172-1
+            // 171-1
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options => {
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     // ValidateIssuerSigningKey should be true
+                    // validateIssuerSigningKey: false, allows anonymous users to access everything.
                     ValidateIssuerSigningKey = true,
+                    // 171-3 add key:value into appsettings.Development.json
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Token:Key"])),
                     ValidIssuer = config["Token:Issuer"],
                     // ValidateIssuer should be true
                     ValidateIssuer = true,
+
+                    // 173
+                    // Validate is null. (is got when audience defaults is used.)
+                    // A token can have a audience(client application).
+                    ValidateAudience = false,
                 };
             });
 

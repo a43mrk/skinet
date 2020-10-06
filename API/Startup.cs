@@ -71,6 +71,7 @@ namespace API
             services.AddApplicationServices();
 
             // 166-2
+            // 171-2 pass IConfiguration into IdentityServiceExtension
             services.AddIdentityServices(_config);
 
             // 56-4 inject the custom swagger service
@@ -113,7 +114,7 @@ namespace API
             // beware of misspelling.
             app.UseCors("CorsPolicy");
 
-            // 171- add just before UseAuthorization the UseAuthentication
+            // 171-4 add just before UseAuthorization the UseAuthentication
             app.UseAuthentication();
             app.UseAuthorization();
 
