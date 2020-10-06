@@ -1,3 +1,4 @@
+import { AccountService } from './../account.service';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
@@ -10,7 +11,7 @@ export class LoginComponent implements OnInit {
   // 190-3 hold a FormGroup as a property
   loginForm: FormGroup;
 
-  constructor() { }
+  constructor(private accountService: AccountService) { }
 
   ngOnInit(): void {
     // 190-4 initializes formGroup
@@ -26,6 +27,10 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.loginForm.value);
+    this.accountService.login(this.loginForm.value).subscribe(() => {
+      console.log("user logged in");
+    }, error => {
+      console.log(error);
+    });
   }
 }
