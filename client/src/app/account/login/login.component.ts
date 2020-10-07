@@ -1,4 +1,4 @@
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { AccountService } from './../account.service';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
@@ -11,10 +11,19 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 export class LoginComponent implements OnInit {
   // 190-3 hold a FormGroup as a property
   loginForm: FormGroup;
+  // 203-3
+  returnUrl: string;
 
-  constructor(private accountService: AccountService, private router: Router) { }
+  constructor(
+    private accountService: AccountService,
+    // 203-4 Inject ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private router: Router) { }
 
   ngOnInit(): void {
+    // 203-5 initialize returnUrl w/ activated route
+    this.returnUrl = this.activatedRoute.snapshot.queryParams.returnUrl || '/shop';
+
     // 190-4 initializes formGroup
     this.createLoginForm();
   }
@@ -29,7 +38,8 @@ export class LoginComponent implements OnInit {
 
   onSubmit() {
     this.accountService.login(this.loginForm.value).subscribe(() => {
-      this.router.navigateByUrl('/shop');
+      // 203-6 set to the url to be routed after submit.
+      this.router.navigateByUrl(this.returnUrl);
     }, error => {
       console.log(error);
     });
