@@ -1,6 +1,6 @@
 import { Router } from '@angular/router';
 import { map } from 'rxjs/operators';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, of, ReplaySubject } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Injectable } from '@angular/core';
@@ -12,17 +12,26 @@ import { IUser } from '../shared/models/user';
 export class AccountService {
   // 187-1 bring environment
   baseUrl = environment.apiUrl;
-  private currentUserSource = new BehaviorSubject<IUser>(null);
+
+  // 204-1 ReplaySubject(1) will cache one object
+  private currentUserSource = new ReplaySubject<IUser>(1);
   currentUser$ = this.currentUserSource.asObservable();
 
   // 187-2 inject HttpClient
   constructor(private http: HttpClient, private router: Router) { }
 
-  getCurrentUserValue() {
-    return this.currentUserSource.value;
-  }
+  // getCurrentUserValue() {
+  //   return this.currentUserSource.value;
+  // }
 
   loadCurrentUser(token: string) {
+    // 204
+    if (token === null) {
+      this.currentUserSource.next(null);
+      // of(type) return a observable of type
+      return of(null);
+    }
+
     let headers = new HttpHeaders();
     headers = headers.set('Authorization', `Bearer ${token}`);
 
