@@ -2,6 +2,7 @@ using Core.Entities;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
+using Core.Entities.OrderAggregate;
 
 // 11-1 create StoreContext to use EF.
 // install Microsoft.EntityFrameworkCore (use the same version on host version at dotnet info)
@@ -22,6 +23,11 @@ namespace Infrastructure.Data
         public DbSet<ProductBrand> ProductBrands { get; set; }
 
         public DbSet<ProductType> ProductTypes { get; set; }
+
+        // 210-1 add Order, OrderItem, DeliveryMethod entities to DbContext
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderItem> OrderItems { get; set; }
+        public DbSet<DeliveryMethod> DeliveryMethods { get; set; }
 
         // 26-2 register the EF Migration Configuration.
         protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -6,6 +6,7 @@ using System.Text.Json;
 using System.Collections.Generic;
 using Core.Entities;
 using System;
+using Core.Entities.OrderAggregate;
 
 // 28-1. Seed Data to Database with some data that comes from json files.
 namespace Infrastructure.Data
@@ -51,6 +52,24 @@ namespace Infrastructure.Data
                     // {
                     //     context.Products.Add(item);
                     // }
+                    await context.SaveChangesAsync();
+                }
+
+                // 210. data to be seeded for DeliveryMethods
+                // -> add migration next.
+                // 211.
+                // dotnet ef migrations add OrderEntityAdded -p Infrastructure -s API -c StoreContext
+                if(!context.DeliveryMethods.Any())
+                {
+                    var dmData = File.ReadAllText("../Infrastructure/Data/SeedData/delivery.json");
+
+                    var methods = JsonSerializer.Deserialize<List<DeliveryMethod>>(dmData);
+
+
+                    foreach(var item in methods)
+                    {
+                    methods.ForEach( item => context.DeliveryMethods.Add(item));
+                    }
                     await context.SaveChangesAsync();
                 }
             } 

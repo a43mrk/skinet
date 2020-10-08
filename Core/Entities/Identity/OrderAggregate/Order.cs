@@ -6,6 +6,11 @@ namespace Core.Entities.OrderAggregate
 {
     public class Order : BaseEntity
     {
+        // 211. paramerless constructor for EF
+        public Order()
+        {
+        }
+
         public Order(
             IReadOnlyList<OrderItem> orderItems,
             string buyerEmail,
