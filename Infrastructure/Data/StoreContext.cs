@@ -3,6 +3,8 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using Core.Entities.OrderAggregate;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using System;
 
 // 11-1 create StoreContext to use EF.
 // install Microsoft.EntityFrameworkCore (use the same version on host version at dotnet info)
@@ -42,10 +44,20 @@ namespace Infrastructure.Data
                 {
                     var properties = entityType.ClrType.GetProperties().Where(p => p.PropertyType == typeof(decimal));
 
+                    // 223 fix DateTimeOffset for sqlite
+                    var dateTimeProperties = entityType.ClrType.GetProperties().Where(p => p.PropertyType == typeof(DateTimeOffset));
+
                     foreach(var property in properties)
                     {
                         modelBuilder.Entity(entityType.Name).Property(property.Name)
                             .HasConversion<double>();
+                    }
+
+                    // 223 fix DateTimeOffset for sqlite
+                    foreach(var property in dateTimeProperties)
+                    {
+                        modelBuilder.Entity(entityType.Name).Property(property.Name)
+                            .HasConversion(new DateTimeOffsetToBinaryConverter());
                     }
                 }
             }
