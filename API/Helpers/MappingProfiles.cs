@@ -2,6 +2,7 @@ using AutoMapper;
 using Core.Entities;
 using API.Dtos;
 using Core.Entities.Identity;
+using Core.Entities.OrderAggregate;
 
 // 43-1 install nuget AutoMapper.Extensions.Microsoft.DependencyInjection
 // >dotnet restore
@@ -25,7 +26,7 @@ namespace API.Helpers
 
             // 176-2 Define how to AutoMap for AddressDto
             // 214- Beware to not mix with the Address of aggregates.
-            CreateMap<Address, AddressDto>().ReverseMap();
+            CreateMap<Core.Entities.Identity.Address, AddressDto>().ReverseMap();
 
             // 182-2 map customer basket and basket item Dto's
             CreateMap<CustomerBasketDto, CustomerBasket>();
@@ -33,6 +34,10 @@ namespace API.Helpers
 
             // 214-2 Maping for AddressDto to Address of aggregates
             CreateMap<AddressDto, Core.Entities.OrderAggregate.Address>();
+
+            //224-3 register the Dto to be automapped
+            CreateMap<Order, OrderToReturnDto>();
+            CreateMap<OrderItem, OrderItemDto>();
         }
         
     }
