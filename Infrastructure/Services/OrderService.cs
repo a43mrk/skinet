@@ -33,6 +33,7 @@ namespace Infrastructure.Services
         {
             // get basket from the repo
             var basket = await _basketRepo.GetBasketAsync(basketId);
+            // TODO: Handle non existing basket
 
             // get items from the product repo
             var items = new List<OrderItem>();
@@ -42,7 +43,6 @@ namespace Infrastructure.Services
                 var itemOrdered = new ProductItemOrdered(productItem.Id, productItem.Name, productItem.PictureUrl);
                 var orderItem = new OrderItem(itemOrdered, productItem.Price, item.Quantity);
                 items.Add(orderItem);
-
             }
 
             // get delivery method from repo
@@ -55,6 +55,7 @@ namespace Infrastructure.Services
             var order = new Order(items, buyerEmail, shippingAddress, deliveryMethod, subtotal);
 
             // TODO: save to db
+
             // return order
             return order;
 

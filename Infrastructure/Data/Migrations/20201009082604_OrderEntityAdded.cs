@@ -62,7 +62,7 @@ namespace Infrastructure.Data.Migrations
                     ItemOrdered_ProductItemId = table.Column<int>(nullable: true),
                     ItemOrdered_ProductName = table.Column<string>(nullable: true),
                     ItemOrdered_PictureUrl = table.Column<string>(nullable: true),
-                    Price = table.Column<double>(type: "decimal(18,2", nullable: false),
+                    Price = table.Column<double>(type: "decimal(18,2)", nullable: false),
                     Quantity = table.Column<int>(nullable: false),
                     OrderId = table.Column<int>(nullable: true)
                 },
