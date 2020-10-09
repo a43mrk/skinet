@@ -24,11 +24,15 @@ namespace API.Helpers
                 .ForMember( d => d.PictureUrl, o => o.MapFrom<ProductUrlResolver>());
 
             // 176-2 Define how to AutoMap for AddressDto
+            // 214- Beware to not mix with the Address of aggregates.
             CreateMap<Address, AddressDto>().ReverseMap();
 
             // 182-2 map customer basket and basket item Dto's
             CreateMap<CustomerBasketDto, CustomerBasket>();
             CreateMap<BasketItemDto, BasketItem>();
+
+            // 214-2 Maping for AddressDto to Address of aggregates
+            CreateMap<AddressDto, Core.Entities.OrderAggregate.Address>();
         }
         
     }

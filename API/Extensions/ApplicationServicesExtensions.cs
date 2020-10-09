@@ -14,6 +14,10 @@ namespace API.Extensions
         // to be able to be added as configuration at Startup.cs
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
+            
+            // 212 -3 Inject IOrderService and his Implementation
+            services.AddScoped<IOrderService, OrderService>();
+
             // 172-1 Inject ITokenService and TokenService.
             // to be accessed at AccountController.
             services.AddScoped<ITokenService, TokenService>();
