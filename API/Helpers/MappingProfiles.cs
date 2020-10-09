@@ -36,8 +36,17 @@ namespace API.Helpers
             CreateMap<AddressDto, Core.Entities.OrderAggregate.Address>();
 
             //224-3 register the Dto to be automapped
-            CreateMap<Order, OrderToReturnDto>();
-            CreateMap<OrderItem, OrderItemDto>();
+            CreateMap<Order, OrderToReturnDto>()
+                // 215-1 fix missing automap properties
+                .ForMember( to => to.DeliveryMethod, from => from.MapFrom( entity => entity.DeliveryMethod.ShortName))
+                .ForMember( to => to.ShippingPrice, from => from.MapFrom( entity => entity.DeliveryMethod.Price));
+            CreateMap<OrderItem, OrderItemDto>()
+                // 215-2 fix missing automap properties
+                .ForMember( t => t.ProductId, f => f.MapFrom( e => e.ItemOrdered.ProductItemId))
+                .ForMember( t => t.ProductName, f => f.MapFrom( e => e.ItemOrdered.ProductName))
+                .ForMember( t => t.PictureUrl, f => f.MapFrom( e => e.ItemOrdered.PictureUrl))
+                // 226-2 resolve full url for the picture
+                .ForMember( t => t.PictureUrl, f => f.MapFrom<OrderItemUrlResolver>());
         }
         
     }
