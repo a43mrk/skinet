@@ -53,5 +53,24 @@ namespace Infrastructure.Data
         {
             return await ApplySpecification(spec).CountAsync();
         }
+
+        // 218-4 Implement Unit Of Work new Method Interface
+        public void Add(T entity)
+        {
+            _context.Set<T>().Add(entity);
+        }
+
+        // 218-5 Implement Unit Of Work new Method Interface
+        public void Update(T entity)
+        {
+            _context.Set<T>().Attach(entity);
+            _context.Entry(entity).State = EntityState.Modified;
+        }
+
+        // 218-6 Implement Unit Of Work new Method Interface
+        public void Delete(T entity)
+        {
+            _context.Set<T>().Remove(entity);
+        }
     }
 }

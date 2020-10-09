@@ -18,5 +18,12 @@ namespace Core.Interfaces
 
         // 65-2 adding count capability
         Task<int> CountAsync(ISpecification<T> spec);
+
+        // 218-1 Methods to Use Unit Of Work
+        void Add(T entity);
+        // 218-2 Methods to Use Unit Of Work
+        void Update(T entity);
+        // 218-3 Methods to Use Unit Of Work
+        void Delete(T entity);
     }
 }
