@@ -22,6 +22,9 @@ namespace API.Extensions
             // to be accessed at AccountController.
             services.AddScoped<ITokenService, TokenService>();
 
+            // 217-8 Add Unit Of Work
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+
             // 22-3. inject Repository
             // pass the interface and the concret class.
             services.AddScoped<IProductRepository, ProductRepository>();
