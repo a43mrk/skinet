@@ -1,3 +1,4 @@
+import { IAddress } from './../shared/models/address';
 import { Router } from '@angular/router';
 import { map } from 'rxjs/operators';
 import { BehaviorSubject, of, ReplaySubject } from 'rxjs';
@@ -73,5 +74,14 @@ export class AccountService {
 
   checkEmailExists(email: string) {
     return this.http.get(this.baseUrl + 'account/emailexists?email=' + email);
+  }
+
+  // 242-1 retrieve users address from backend.
+  getUserAddress() {
+    return this.http.get<IAddress>(this.baseUrl + 'account/address');
+  }
+
+  updateUserAddress(address: IAddress) {
+    return this.http.put<IAddress>(this.baseUrl + 'account/address', address);
   }
 }
