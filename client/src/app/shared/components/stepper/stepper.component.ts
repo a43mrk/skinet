@@ -5,7 +5,7 @@ import { Component, Input, OnInit } from '@angular/core';
   selector: 'app-stepper',
   templateUrl: './stepper.component.html',
   styleUrls: ['./stepper.component.scss'],
-  // 231-2 declare a provider
+  // 231-2 declare a provider for cdk
   providers: [{ provide: CdkStepper, useExisting: StepperComponent }]
 })
 export class StepperComponent extends CdkStepper implements OnInit {
@@ -21,6 +21,5 @@ export class StepperComponent extends CdkStepper implements OnInit {
   onClick(index: number)
   {
     this.selectedIndex = index;
-    console.log(this.selectedIndex);
   }
 }
