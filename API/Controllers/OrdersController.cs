@@ -26,7 +26,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Order>> CreateOrder(OrderDto orderDto)
+        public async Task<ActionResult<Order>> CreateOrder([FromBody] OrderDto orderDto)
         {
             // this line was refactore as a extension
             // var email = HttpContext.User?.Claims?.FirstOrDefault( x => x.Type == ClaimTypes.Email) ?.Value;

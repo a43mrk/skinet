@@ -15,10 +15,6 @@ namespace Infrastructure.Data
         public BasketRepository(IConnectionMultiplexer redis) {
             _database = redis.GetDatabase();
         }
-        public async Task<bool> DeleteBasketAsync(string basketId)
-        {
-            return await _database.KeyDeleteAsync(basketId);
-        }
 
         public async Task<CustomerBasket> GetBasketAsync(string basketId)
         {
@@ -37,6 +33,10 @@ namespace Infrastructure.Data
             if (!created) return null;
 
             return await GetBasketAsync(basket.Id);
+        }
+        public async Task<bool> DeleteBasketAsync(string basketId)
+        {
+            return await _database.KeyDeleteAsync(basketId);
         }
     }
 }

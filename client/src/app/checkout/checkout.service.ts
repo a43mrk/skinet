@@ -1,3 +1,4 @@
+import { IOrderToCreate } from './../shared/models/order';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
@@ -19,5 +20,10 @@ export class CheckoutService {
         return dm.sort((a, b) => b.price - a.price);
       })
     );
+  }
+
+  // 246-1
+  createOrder(order: IOrderToCreate) {
+    return this.http.post(this.baseUrl + 'orders', order);
   }
 }
