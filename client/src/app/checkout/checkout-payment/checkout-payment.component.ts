@@ -27,6 +27,8 @@ export class CheckoutPaymentComponent implements AfterViewInit, OnDestroy {
   cardExpiry: any;
   cardCvc: any;
   cardErrors: any;
+  // 266-1 bind to this class
+  cardHandler = this.onChange.bind(this);
 
   constructor(
     private basketService: BasketService,
@@ -42,18 +44,29 @@ export class CheckoutPaymentComponent implements AfterViewInit, OnDestroy {
     this.cardExpiry.destroy();
   }
 
+  onChange({error}) {
+    if (error) {
+      this.cardErrors = error.message;
+    } else {
+      this.cardErrors = null;
+    }
+  }
+
   ngAfterViewInit(): void {
     this.stripe = Stripe('pk_test_51HbigvCu3NZCawmgVfXJlCK2qZeL3adVgot2yDWcQVh8eH3sZOl4fKzJ3PVaBMWiBFPGaOQJLgLryAAfBnNsB55r00UV2ibYFd');
     const elements = this.stripe.elements();
 
     this.cardNumber = elements.create('cardNumber');
     this.cardNumber.mount(this.cardNumberElement.nativeElement);
+    this.cardNumber.addEventListener('change', this.cardHandler);
 
     this.cardExpiry = elements.create('cardExpiry');
     this.cardExpiry.mount(this.cardExpiryElement.nativeElement);
+    this.cardExpiry.addEventListener('change', this.cardHandler);
 
     this.cardCvc = elements.create('cardCvc');
     this.cardCvc.mount(this.cardCvcElement.nativeElement);
+    this.cardCvc.addEventListener('change', this.cardHandler);
   }
 
   submitOrder() {
