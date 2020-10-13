@@ -23,7 +23,12 @@ export class BasketService {
 
   setShippingPrice(deliveryMethod: IDeliveryMethod) {
     this.shipping = deliveryMethod.price;
+    //261-2
+    const basket = this.getCurrentBasketValue();
+    basket.deliveryMethodId = deliveryMethod.id;
     this.calculateTotals();
+    // 261-3
+    this.setBasket(basket);
   }
 
   getBasket(id: string) {
