@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Observable } from 'rxjs';
 import { AccountService } from '../account/account.service';
+import { BasketService } from '../basket/basket.service';
+import { IBasketTotals } from '../shared/models/basket';
 
 @Component({
   selector: 'app-checkout',
@@ -8,15 +11,21 @@ import { AccountService } from '../account/account.service';
   styleUrls: ['./checkout.component.scss']
 })
 export class CheckoutComponent implements OnInit {
+  basketTotals$: Observable<IBasketTotals>;
   // 233-1 Be sure that you had imported and exported ReactiveFormsModule at sharedModule
   // and import the sharedModule inside checkout.module
   checkoutForm: FormGroup;
 
-  constructor(private fb: FormBuilder, private accountService: AccountService) { }
+  constructor(
+    private fb: FormBuilder,
+    private basketService: BasketService,
+    private accountService: AccountService
+  ) { }
 
   ngOnInit(): void {
     this.createCheckoutForm();
     this.getAddressFormValues();
+    this.basketTotals$ = this.basketService.basketTotal$;
   }
 
   // 242-2 populate address form with backend data

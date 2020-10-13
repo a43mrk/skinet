@@ -1,3 +1,4 @@
+import { SharedModule } from './../shared/shared.module';
 import { OrdersRoutingModule } from './orders-routing.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -11,7 +12,9 @@ import { OrderDetailedComponent } from './order-detailed/order-detailed.componen
   imports: [
     CommonModule,
     // don't forget to add routing module to make available for the template
-    OrdersRoutingModule
+    OrdersRoutingModule,
+    // to use app-basket-summary we need to add SharedModule
+    SharedModule
   ]
 })
 export class OrdersModule { }
