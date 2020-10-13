@@ -21,6 +21,11 @@ export class BasketService {
 
   constructor(private http: HttpClient) { }
 
+  // 262-1
+  createPaymentItent() {
+    return this.http.post(this.baseUrl + 'payments/' + this.getCurrentBasketValue().id, {});
+  }
+
   setShippingPrice(deliveryMethod: IDeliveryMethod) {
     this.shipping = deliveryMethod.price;
     //261-2
