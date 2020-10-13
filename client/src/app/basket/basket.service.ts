@@ -23,7 +23,11 @@ export class BasketService {
 
   // 262-1
   createPaymentItent() {
-    return this.http.post(this.baseUrl + 'payments/' + this.getCurrentBasketValue().id, {});
+    return this.http.post(this.baseUrl + 'payments/' + this.getCurrentBasketValue().id, {}).pipe(
+      map((basket: IBasket) => {
+        this.basketSource.next(basket);
+      })
+    );
   }
 
   setShippingPrice(deliveryMethod: IDeliveryMethod) {

@@ -3,17 +3,30 @@ import { IOrder, IOrderToCreate } from './../../shared/models/order';
 import { ToastrService } from 'ngx-toastr';
 import { CheckoutService } from './../checkout.service';
 import { BasketService } from 'src/app/basket/basket.service';
-import { Component, Input, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Input, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { IBasket } from 'src/app/shared/models/basket';
 import { FormGroup } from '@angular/forms';
 
+// import Stripe javascript version
+declare var Stripe;
+
+// 265-1 implement AfterViewInit
 @Component({
   selector: 'app-checkout-payment',
   templateUrl: './checkout-payment.component.html',
   styleUrls: ['./checkout-payment.component.scss']
 })
-export class CheckoutPaymentComponent implements OnInit {
+export class CheckoutPaymentComponent implements AfterViewInit, OnDestroy {
   @Input() checkoutForm: FormGroup;
+  // 265-2 to access template variables
+  @ViewChild('cardNumber', { static: true }) cardNumberElement: ElementRef;
+  @ViewChild('cardExpiry', { static: true }) cardExpiryElement: ElementRef;
+  @ViewChild('cardCvc', { static: true }) cardCvcElement: ElementRef;
+  stripe: any;
+  cardNumber: any;
+  cardExpiry: any;
+  cardCvc: any;
+  cardErrors: any;
 
   constructor(
     private basketService: BasketService,
@@ -22,7 +35,25 @@ export class CheckoutPaymentComponent implements OnInit {
     private router: Router
   ) { }
 
-  ngOnInit(): void {
+  // don't forget to dispose stripe elements w/ ngOnDestroy
+  ngOnDestroy(): void {
+    this.cardNumber.destroy();
+    this.cardCvc.destroy();
+    this.cardExpiry.destroy();
+  }
+
+  ngAfterViewInit(): void {
+    this.stripe = Stripe('pk_test_51HbigvCu3NZCawmgVfXJlCK2qZeL3adVgot2yDWcQVh8eH3sZOl4fKzJ3PVaBMWiBFPGaOQJLgLryAAfBnNsB55r00UV2ibYFd');
+    const elements = this.stripe.elements();
+
+    this.cardNumber = elements.create('cardNumber');
+    this.cardNumber.mount(this.cardNumberElement.nativeElement);
+
+    this.cardExpiry = elements.create('cardExpiry');
+    this.cardExpiry.mount(this.cardExpiryElement.nativeElement);
+
+    this.cardCvc = elements.create('cardCvc');
+    this.cardCvc.mount(this.cardCvcElement.nativeElement);
   }
 
   submitOrder() {
