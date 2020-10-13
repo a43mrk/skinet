@@ -14,6 +14,7 @@ namespace API.Dtos
         public int? DeliveryMethodId { get; set; }
         public string ClientSecret { get; set; }
         public string PaymentIntentId { get; set; }
+        // 163-3
         public decimal ShippingPrice { get; set; }
     }
 }
