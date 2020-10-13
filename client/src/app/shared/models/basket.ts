@@ -8,6 +8,8 @@ export interface IBasket {
     clientSecret?: string;
     paymentIntentId?: string;
     deliveryMethodId?: number;
+    // 263-1 property to hold the shipping selected price
+    shippingPrice?: number;
 }
 
 export interface IBasketItem {
