@@ -1,0 +1,17 @@
+import { OrdersRoutingModule } from './orders-routing.module';
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { OrdersComponent } from './orders.component';
+import { OrderDetailedComponent } from './order-detailed/order-detailed.component';
+
+
+
+@NgModule({
+  declarations: [OrdersComponent, OrderDetailedComponent],
+  imports: [
+    CommonModule,
+    // don't forget to add routing module to make available for the template
+    OrdersRoutingModule
+  ]
+})
+export class OrdersModule { }
