@@ -4,8 +4,10 @@ using System.Threading.Tasks;
 using Core.Entities;
 using Core.Entities.OrderAggregate;
 using Core.Interfaces;
+using Core.Specifications;
 using Microsoft.Extensions.Configuration;
 using Stripe;
+using Order = Core.Entities.OrderAggregate.Order;
 using Product = Core.Entities.Product;
 
 // 258-2 Inplementation for IPaymentService Interface
@@ -80,6 +82,36 @@ namespace Infrastructure.Services
 
             await _basketRepository.UpdateBasketAsync(basket);
             return basket;
+        }
+
+        // 276-4
+        public async Task<Core.Entities.OrderAggregate.Order> UpdateOrderPaymentFailed(string paymentIntentId)
+        {
+            var spec = new OrderByPaymentIntentIdSpecification(paymentIntentId);
+            var order = await _unitOfWork.Repository<Order>().GetEntityWithSpec(spec);
+
+            if(order == null) return null;
+
+            order.Status = OrderStatus.PaymentFailed;
+            await _unitOfWork.Complete();
+
+            return order;
+        }
+
+        // 276-3
+        public async Task<Order> UpdateOrderPaymentSucceeded(string paymentIntentId)
+        {
+            var spec = new OrderByPaymentIntentIdSpecification(paymentIntentId);
+            var order = await _unitOfWork.Repository<Order>().GetEntityWithSpec(spec);
+
+            if (order == null) return null;
+
+            order.Status = OrderStatus.PaymentReceived;
+            _unitOfWork.Repository<Order>().Update(order);
+
+            await _unitOfWork.Complete();
+
+            return null;
         }
     }
 }
