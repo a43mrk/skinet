@@ -31,6 +31,10 @@ namespace Infrastructure.Services
             //259-1
             StripeConfiguration.ApiKey = _config["StripeSettings:SecretKey"];
             var basket = await _basketRepository.GetBasketAsync(basketId);
+
+            // 270-7 don't prevent to process inexistent basket.
+            if(basket == null) return null;
+
             var shippingPrice = 0m;
 
             // Always check new properties before use it.

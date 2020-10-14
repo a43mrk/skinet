@@ -11,18 +11,22 @@ namespace Core.Entities.OrderAggregate
         {
         }
 
+        // 270-1 add paymentIntentId parameter
         public Order(
             IReadOnlyList<OrderItem> orderItems,
             string buyerEmail,
             Address shipToAddress,
             DeliveryMethod deliveryMethod,
-            decimal subtotal)
+            decimal subtotal,
+            string paymentIntentId
+            )
         {
             BuyerEmail = buyerEmail;
             ShipToAddress = shipToAddress;
             DeliveryMethod = deliveryMethod;
             OrderItems = orderItems;
             Subtotal = subtotal;
+            PaymentIntentId = paymentIntentId;
         }
 
         // used to retrieve a list of orders for a particular user

@@ -75,10 +75,12 @@ export class CheckoutPaymentComponent implements AfterViewInit, OnDestroy {
     this.checkoutService.createOrder(orderToCreate).subscribe((order: IOrder) => {
       this.toastr.success('Order created Successfully');
       // 268-1
+      // beware of wrong method names, look for documentation too
       this.stripe.confirmCardPayment(basket.clientSecret, {
         payment_method: {
           card: this.cardNumber,
           billing_details: {
+            // beware of misspelling! uppercase lowercase
             name: this.checkoutForm.get('paymentForm').get('nameOnCard').value
           }
         }
@@ -89,7 +91,7 @@ export class CheckoutPaymentComponent implements AfterViewInit, OnDestroy {
           const navigationExtras: NavigationExtras = { state: order };
           this.router.navigate(['checkout/success'], navigationExtras);
         } else {
-          this.toastr.error('Payment error');
+          this.toastr.error(result.error.message);
         }
       });
     }, error => {
