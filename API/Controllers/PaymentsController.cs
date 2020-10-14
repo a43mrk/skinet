@@ -16,7 +16,9 @@ namespace API.Controllers
     public class PaymentsController : BaseApiController
     {
         private readonly IPaymentService _paymentService;
-        private const string WhSecret = "";
+
+        // 277-1 set the secret key from stripe listen command.
+        private const string WhSecret = "whsec_96R4moHRnx475UItBr6UBV4OsAg71ZsE";
         private readonly ILogger<IPaymentService> _logger;
         public PaymentsController(IPaymentService paymentService, ILogger<IPaymentService> logger)
         {
