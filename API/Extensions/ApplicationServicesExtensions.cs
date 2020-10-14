@@ -14,6 +14,9 @@ namespace API.Extensions
         // to be able to be added as configuration at Startup.cs
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
+            // 280-4 inject cache service and interface
+            services.AddSingleton<IResponseCacheService, ResponseCacheService>();
+
             // 172-1 Inject ITokenService and TokenService.
             // to be accessed at AccountController.
             services.AddScoped<ITokenService, TokenService>();
