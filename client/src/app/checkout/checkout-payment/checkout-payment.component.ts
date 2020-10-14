@@ -29,6 +29,9 @@ export class CheckoutPaymentComponent implements AfterViewInit, OnDestroy {
   cardErrors: any;
   // 266-1 bind to this class
   cardHandler = this.onChange.bind(this);
+  // 271-1 new property
+  // used when started and finished.
+  loading = false;
 
   constructor(
     private basketService: BasketService,
@@ -69,14 +72,63 @@ export class CheckoutPaymentComponent implements AfterViewInit, OnDestroy {
     this.cardCvc.addEventListener('change', this.cardHandler);
   }
 
-  submitOrder() {
+  // 271-2 use async to use await other than then w/ promisees.
+  async submitOrder() {
+    // 271-3
+    this.loading = true;
     const basket = this.basketService.getCurrentBasketValue();
-    const orderToCreate = this.getOrderToCreate(basket);
-    this.checkoutService.createOrder(orderToCreate).subscribe((order: IOrder) => {
-      this.toastr.success('Order created Successfully');
-      // 268-1
-      // beware of wrong method names, look for documentation too
-      this.stripe.confirmCardPayment(basket.clientSecret, {
+    try {
+      // 271-4
+      const createdOrder = await this.createOrder(basket);
+
+      // 271-5
+      const paymentResult = await this.confirmPaymentWithStripe(basket);
+
+      if (paymentResult.paymentIntent){
+        this.basketService.deleteLocalBasket(basket.id);
+        const navigationExtras: NavigationExtras = { state: createdOrder };
+        this.router.navigate(['checkout/success'], navigationExtras);
+      } else {
+        this.toastr.error(paymentResult.error.message);
+      }
+      // this.loading = false;
+    } catch (error){
+      console.log(error);
+      // this.loading = false;
+    } finally {
+      this.loading = false;
+    }
+    // this.checkoutService.createOrder(orderToCreate).subscribe((order: IOrder) => {
+    //   // 271. no toastr
+    //   // this.toastr.success('Order created Successfully');
+
+    //   // 268-1
+    //   // beware of wrong method names, look for documentation too
+    //   this.stripe.confirmCardPayment(basket.clientSecret, {
+    //     payment_method: {
+    //       card: this.cardNumber,
+    //       billing_details: {
+    //         // beware of misspelling! uppercase lowercase
+    //         name: this.checkoutForm.get('paymentForm').get('nameOnCard').value
+    //       }
+    //     }
+    //   }).then(result => {
+    //     console.log(result);
+    //     if (result.paymentIntent){
+    //       this.basketService.deleteLocalBasket(basket.id);
+    //       const navigationExtras: NavigationExtras = { state: order };
+    //       this.router.navigate(['checkout/success'], navigationExtras);
+    //     } else {
+    //       this.toastr.error(result.error.message);
+    //     }
+    //   });
+    // }, error => {
+    //   this.toastr.error(error.message);
+    //   console.log(error);
+    // });
+  }
+  private async confirmPaymentWithStripe(basket) {
+      return this.stripe.confirmCardPayment(basket.clientSecret, {
         payment_method: {
           card: this.cardNumber,
           billing_details: {
@@ -84,20 +136,11 @@ export class CheckoutPaymentComponent implements AfterViewInit, OnDestroy {
             name: this.checkoutForm.get('paymentForm').get('nameOnCard').value
           }
         }
-      }).then(result => {
-        console.log(result);
-        if (result.paymentIntent){
-          this.basketService.deleteLocalBasket(basket.id);
-          const navigationExtras: NavigationExtras = { state: order };
-          this.router.navigate(['checkout/success'], navigationExtras);
-        } else {
-          this.toastr.error(result.error.message);
-        }
       });
-    }, error => {
-      this.toastr.error(error.message);
-      console.log(error);
-    });
+  }
+  private async createOrder(basket: IBasket) {
+    const orderToCreate = this.getOrderToCreate(basket);
+    return this.checkoutService.createOrder(orderToCreate).toPromise();
   }
 
   getOrderToCreate(basket: IBasket) {

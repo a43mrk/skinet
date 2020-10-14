@@ -8,9 +8,17 @@ import { delay, finalize } from 'rxjs/operators';
 export class LoadingInterceptor implements HttpInterceptor {
     constructor(private busyService: BusyService){}
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+        // 272-1 turn off spinner when posting order, because stripe's iframe.
+        if (req.method === 'POST' && req.url.includes('orders')) {
+          return next.handle(req);
+        }
+
         if (!req.url.includes('emailexists')) {
             this.busyService.busy();
         }
+
+        // 272-2
+        // this.busyService.busy();
 
         return next.handle(req).pipe(
             delay(1000),
