@@ -17,12 +17,14 @@
     </div>
   </div>
 </div>
-<div clase="float-none d-flex justify-content-between flex-column flex-lg-row mb-5">
+<div class="float-none d-flex justify-content-between flex-column flex-lg-row mb-5">
   <button class="btn btn-outline-primary" cdkStepperPrevious>
     <i class="fa fa-angle-left"></i> Back to Review
   </button>
   <!-- 172 disable when loading -->
-  <button [disabled]="loading" class="btn-primary" (click)="submitOrder()">
+  <button
+    [disabled]="loading || checkoutForm.get('paymentForm').invalid || !cardNumberValid || !cardExpiryValid || !cardCvcValid"
+    class="btn btn-primary" (click)="submitOrder()">
     Submit Order <i class="fa fa-angle-right"></i>
     <!-- 172 show spinner when loading -->
     <i *ngIf="loading" class="fa fa-spinner fa-spin"></i>

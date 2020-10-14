@@ -33,6 +33,11 @@ export class CheckoutPaymentComponent implements AfterViewInit, OnDestroy {
   // used when started and finished.
   loading = false;
 
+  // 274-1 flags to disable/enable submit button for payments
+  cardNumberValid = false;
+  cardExpiryValid = false;
+  cardCvcValid = false;
+
   constructor(
     private basketService: BasketService,
     private checkoutService: CheckoutService,
@@ -47,11 +52,26 @@ export class CheckoutPaymentComponent implements AfterViewInit, OnDestroy {
     this.cardExpiry.destroy();
   }
 
-  onChange({error}) {
-    if (error) {
-      this.cardErrors = error.message;
+  // 173-1 no destructure to get directly error prop.
+  onChange(event) {
+    // console.log(event);
+    if (event.error) {
+      this.cardErrors = event.error.message;
     } else {
       this.cardErrors = null;
+    }
+
+  // 173-3 set the flags accordingly to the changed stripe element.
+    switch(event.elementType){
+      case 'cardNumber':
+        this.cardNumberValid = event.complete;
+        break;
+      case 'cardExpiry':
+        this.cardExpiryValid = event.complete;
+        break;
+      case 'cardCvc':
+        this.cardCvcValid = event.complete;
+        break;
     }
   }
 

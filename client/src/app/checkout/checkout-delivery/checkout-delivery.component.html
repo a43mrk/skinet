@@ -22,7 +22,9 @@
   <button class="btn btn-outline-primary" cdkStepperPrevious>
     <i class="fa fa-angle-left"> Back to Address</i>
   </button>
-  <button class="btn btn-primary" cdkStepperNext>
+
+  <!-- // 173 - disable when form is invalid to not advance -->
+  <button [disabled]="checkoutForm.get('deliveryForm').invalid" class="btn btn-primary" cdkStepperNext>
     Got to Review <i class="fa fa-angle-right"></i>
   </button>
 </div>
