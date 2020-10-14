@@ -73,7 +73,9 @@ namespace API.Controllers
                 new Pagination<ProductToReturnDto>(productParams.PageIndex, productParams.PageSize, totalItems, data)
                 );
         }
-        
+
+        // 282-1 decorate w/ caching
+        [Cached(600)] 
         [HttpGet("{id}")]
         public async Task<ActionResult<ProductToReturnDto>> GetProduct(int id){
             // return await _context.Products.FindAsync(id);
@@ -105,6 +107,8 @@ namespace API.Controllers
         }
 
         // 29-3 make accessible productBrands and productTypes at controllers
+        // 282-2 decorate w/ caching
+        [Cached(600)] 
         [HttpGet("brands")]
         public async Task<ActionResult<IReadOnlyList<ProductBrand>>> GetProductBrands()
         {
@@ -113,6 +117,8 @@ namespace API.Controllers
             return Ok(await _productBrandRepo.ListAllAsync());
         }
 
+        // 282-3 decorate w/ caching
+        [Cached(600)] 
         [HttpGet("types")]
         public async Task<ActionResult<IReadOnlyList<ProductType>>> GetProductTypes()
         {
