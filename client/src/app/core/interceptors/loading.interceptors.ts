@@ -13,6 +13,11 @@ export class LoadingInterceptor implements HttpInterceptor {
           return next.handle(req);
         }
 
+        // 286- don't show spinner when deleting basket.
+        if (req.method === 'DELETE') {
+          return next.handle(req);
+        }
+
         if (!req.url.includes('emailexists')) {
             this.busyService.busy();
         }
