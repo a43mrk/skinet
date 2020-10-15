@@ -37,7 +37,8 @@ namespace API
         // public IConfiguration Configuration { get; }
 
         // 294
-        public void ConfigurationDevelopmentServices(IServiceCollection services)
+        // the method name should be ConfigureDevelopmentServices or errors will occur
+        public void ConfigureDevelopmentServices(IServiceCollection services)
         {
             // 12-2 add connection string after set the key value at appsettings.Development.json (12-1)
             // GetConnectionString points to GetSection("ConnectionStrings")[name]
@@ -62,7 +63,8 @@ namespace API
         }
 
         // 294
-        public void ConfigurationProductionServices(IServiceCollection services)
+        // the method name should be ConfigureProductionServices or errors will occur
+       public void ConfigureProductionServices(IServiceCollection services)
         {
             services.AddDbContext<StoreContext>(x =>
                 x.UseMySql(_config.GetConnectionString("DefaultConnection")));

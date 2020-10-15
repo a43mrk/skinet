@@ -14,11 +14,16 @@ namespace Infrastructure.Data
 {
     public class StoreContext : DbContext
     {
-        // 11-2 create a contructor w/ DbContextOptions as parameter.
+        // 11-2 create a constructor w/ DbContextOptions as parameter.
         // don't forget to pass options to base class.
         public StoreContext(DbContextOptions<StoreContext> options) : base(options)
         {
         }
+
+        public StoreContext()
+        {
+        }
+
         // 11-3 Declare the Entities here as DbSet of that Entity.
         // property should be the plurals name of the entity.
         public DbSet<Product> Products { get; set; }
