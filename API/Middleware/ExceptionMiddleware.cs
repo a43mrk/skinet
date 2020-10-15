@@ -44,7 +44,9 @@ namespace API.Middleware
                 // verbose at development mode.
                 var response = _env.IsDevelopment() 
                     ? new ApiException((int)HttpStatusCode.InternalServerError, ex.Message, ex.StackTrace.ToString())
-                    : new ApiException((int)HttpStatusCode.InternalServerError);
+                    // 296 author is setting more verbosity for production because the debugging difficulty for linux machines.
+                    // but don't make verbose at production(at normal case)
+                    : new ApiException((int)HttpStatusCode.InternalServerError, ex.Message, ex.StackTrace.ToString());
 
                 // 52-4 change exception stacktrace message to camelcase.
                 var options = new JsonSerializerOptions {

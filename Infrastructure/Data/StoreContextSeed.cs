@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using Core.Entities;
 using System;
 using Core.Entities.OrderAggregate;
+using System.Reflection;
 
 // 28-1. Seed Data to Database with some data that comes from json files.
 namespace Infrastructure.Data
@@ -15,9 +16,11 @@ namespace Infrastructure.Data
     {
         public static async Task SeedAsync(StoreContext context, ILoggerFactory loggerFactory){
             try {
+                var path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
                 if(!context.ProductBrands.Any())
                 {
-                    var brandsData = File.ReadAllText("../Infrastructure/Data/SeedData/brands.json");
+                    var brandsData = File.ReadAllText(path + @"/Data/SeedData/brands.json");
 
                     var brands = JsonSerializer.Deserialize<List<ProductBrand>>(brandsData);
 
@@ -30,7 +33,7 @@ namespace Infrastructure.Data
 
                 if(!context.ProductTypes.Any())
                 {
-                    var typesData = File.ReadAllText("../Infrastructure/Data/SeedData/types.json");
+                    var typesData = File.ReadAllText( path + @"/Data/SeedData/types.json");
                     var types = JsonSerializer.Deserialize<List<ProductType>>(typesData);
 
                     foreach(var item in types)
@@ -42,7 +45,7 @@ namespace Infrastructure.Data
 
                 if(!context.Products.Any())
                 {
-                    var productsData = File.ReadAllText("../Infrastructure/Data/SeedData/products.json");
+                    var productsData = File.ReadAllText( path + @"/Data/SeedData/products.json");
 
                     var products = JsonSerializer.Deserialize<List<Product>>(productsData);
 
@@ -61,7 +64,7 @@ namespace Infrastructure.Data
                 // dotnet ef migrations add OrderEntityAdded -p Infrastructure -s API -c StoreContext
                 if(!context.DeliveryMethods.Any())
                 {
-                    var dmData = File.ReadAllText("../Infrastructure/Data/SeedData/delivery.json");
+                    var dmData = File.ReadAllText( path + @"/Data/SeedData/delivery.json");
 
                     var methods = JsonSerializer.Deserialize<List<DeliveryMethod>>(dmData);
 
