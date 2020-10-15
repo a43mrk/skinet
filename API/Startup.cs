@@ -10,6 +10,8 @@ using API.Middleware;
 using API.Extensions;
 using StackExchange.Redis;
 using Infrastructure.Identity;
+using Microsoft.Extensions.FileProviders;
+using System.IO;
 
 namespace API
 {
@@ -27,19 +29,16 @@ namespace API
         } 
 
         // removed by tutor. because he don't likes!
+        // public Startup(IConfiguration configuration) 
+        // {
+        //     this.Configuration = configuration;
+               
+        // }
         // public IConfiguration Configuration { get; }
 
-        // *The dependency injection container.
-        // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        // 294
+        public void ConfigurationDevelopmentServices(IServiceCollection services)
         {
-            services.AddControllers();
-
-            // 43-3 add AutoMapper as Services
-            // need to specify where the mapping profile are located(the Assembly where was created the mapping profile class).
-            // pass the Mapping profile type to AddAutoMapper.
-            services.AddAutoMapper(typeof(MappingProfiles));
-
             // 12-2 add connection string after set the key value at appsettings.Development.json (12-1)
             // GetConnectionString points to GetSection("ConnectionStrings")[name]
             // name should be the key that returns the connection string!
@@ -58,6 +57,34 @@ namespace API
             {
                 x.UseSqlite(_config.GetConnectionString("IdentityConnection"));
             });
+
+            ConfigureServices(services);
+        }
+
+        // 294
+        public void ConfigurationProductionServices(IServiceCollection services)
+        {
+            services.AddDbContext<StoreContext>(x =>
+                x.UseMySql(_config.GetConnectionString("DefaultConnection")));
+
+            services.AddDbContext<AppIdentityDbContext>( x =>
+            {
+                x.UseMySql(_config.GetConnectionString("IdentityConnection"));
+            });
+
+            ConfigureServices(services);
+        }
+
+        // *The dependency injection container.
+        // This method gets called by the runtime. Use this method to add services to the container.
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddControllers();
+
+            // 43-3 add AutoMapper as Services
+            // need to specify where the mapping profile are located(the Assembly where was created the mapping profile class).
+            // pass the Mapping profile type to AddAutoMapper.
+            services.AddAutoMapper(typeof(MappingProfiles));
 
             // 135-1
             // Redis configuration
@@ -110,6 +137,14 @@ namespace API
             // 46-1 serve static files
             app.UseStaticFiles();
 
+            //290 new static folder
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                    Path.Combine(Directory.GetCurrentDirectory(), "Content")
+                ), RequestPath = "/content"
+            });
+
             // 67-2 add cors just before authorization.
             // beware of misspelling.
             app.UseCors("CorsPolicy");
@@ -124,6 +159,9 @@ namespace API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                // 290 API needs to know endpoints
+                // prevent to find routes for angular content
+                endpoints.MapFallbackToController("Index", "Fallback");
             });
         }
     }

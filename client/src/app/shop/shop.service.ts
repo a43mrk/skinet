@@ -8,12 +8,14 @@ import { IType } from '../shared/models/productType';
 import { map, delay } from 'rxjs/operators';
 import { IProduct } from '../shared/models/products';
 import { of } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ShopService {
-  baseUrl = 'https://localhost:5001/api/';
+  // 290 get url from environment
+  baseUrl = environment.apiUrl;
   // 283-1 caching
   products: IProduct[] = [];
   brands: IBrand[] = [];
